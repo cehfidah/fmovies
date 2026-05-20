@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getPosts } from '@/lib/db';
 import mappings from '@/lib/slug_mappings.json';
 import { GENRE_MAP, COUNTRY_MAP } from '@/lib/slug-map';
-import { getPopularMovies, getPopularTV, getTopRatedMovies, getTopRatedTV, getTrending, slugify } from '@/lib/tmdb';
+import { getPopularMovies, getPopularTV, getTopRatedMovies, getTopRatedTV, getTrending, getNowPlayingMovies, getUpcomingMovies, getOnAirTV, slugify } from '@/lib/tmdb';
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://fmoviesz.cyou';
 
@@ -48,19 +48,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // ── TMDB dynamic pages (popular + top-rated + trending) ──
-  const [popularMovies, topRatedMovies, trendingMovies, popularTV, topRatedTV, trendingTV] =
+  const [popularMovies, topRatedMovies, trendingMovies, nowPlayingMovies, upcomingMovies, popularTV, topRatedTV, trendingTV, onAirTV] =
     await Promise.all([
       fetchPages(getPopularMovies, 5),
       fetchPages(getTopRatedMovies, 5),
       fetchPages((p) => getTrending('movie', 'week', p), 3),
+      fetchPages(getNowPlayingMovies, 3),
+      fetchPages(getUpcomingMovies, 3),
       fetchPages(getPopularTV, 5),
       fetchPages(getTopRatedTV, 5),
       fetchPages((p) => getTrending('tv', 'week', p), 3),
+      fetchPages(getOnAirTV, 3),
     ]);
 
   // Deduplicate by id
   const seenMovies = new Set<number>();
-  const movieRoutes: MetadataRoute.Sitemap = [...popularMovies, ...topRatedMovies, ...trendingMovies]
+  const movieRoutes: MetadataRoute.Sitemap = [...popularMovies, ...topRatedMovies, ...trendingMovies, ...nowPlayingMovies, ...upcomingMovies]
     .filter(m => m?.id && m?.title && !seenMovies.has(m.id) && seenMovies.add(m.id))
     .map(m => ({
       url: `${BASE}/movie/${slugify(m.title, (m.release_date || '').slice(0, 4))}?id=${m.id}`,
@@ -70,7 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
   const seenTV = new Set<number>();
-  const tvRoutes: MetadataRoute.Sitemap = [...popularTV, ...topRatedTV, ...trendingTV]
+  const tvRoutes: MetadataRoute.Sitemap = [...popularTV, ...topRatedTV, ...trendingTV, ...onAirTV]
     .filter(t => t?.id && t?.name && !seenTV.has(t.id) && seenTV.add(t.id))
     .map(t => ({
       url: `${BASE}/tv/${slugify(t.name, (t.first_air_date || '').slice(0, 4))}?id=${t.id}`,

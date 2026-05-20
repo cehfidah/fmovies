@@ -101,6 +101,9 @@ export const getPopularMovies = (page = 1) => tmdb('/movie/popular', { page: Str
 export const getPopularTV = (page = 1) => tmdb('/tv/popular', { page: String(page) });
 export const getTopRatedMovies = (page = 1) => tmdb('/movie/top_rated', { page: String(page) });
 export const getTopRatedTV = (page = 1) => tmdb('/tv/top_rated', { page: String(page) });
+export const getNowPlayingMovies = (page = 1) => tmdb('/movie/now_playing', { page: String(page) });
+export const getUpcomingMovies = (page = 1) => tmdb('/movie/upcoming', { page: String(page) });
+export const getOnAirTV = (page = 1) => tmdb('/tv/on_the_air', { page: String(page) });
 
 export const searchMulti = (query: string, page = 1) =>
   tmdb('/search/multi', { query, page: String(page) });
