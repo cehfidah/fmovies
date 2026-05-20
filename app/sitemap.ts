@@ -6,6 +6,8 @@ import { getPopularMovies, getPopularTV, getTopRatedMovies, getTopRatedTV, getTr
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://fmoviesz.cyou';
 
+export const revalidate = 86400; // regenerate once per day
+
 async function fetchPages(fn: (page: number) => Promise<any>, pages = 5): Promise<any[]> {
   const results = await Promise.allSettled(
     Array.from({ length: pages }, (_, i) => fn(i + 1))
@@ -50,15 +52,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── TMDB dynamic pages (popular + top-rated + trending) ──
   const [popularMovies, topRatedMovies, trendingMovies, nowPlayingMovies, upcomingMovies, popularTV, topRatedTV, trendingTV, onAirTV] =
     await Promise.all([
-      fetchPages(getPopularMovies, 5),
-      fetchPages(getTopRatedMovies, 5),
-      fetchPages((p) => getTrending('movie', 'week', p), 3),
-      fetchPages(getNowPlayingMovies, 3),
-      fetchPages(getUpcomingMovies, 3),
-      fetchPages(getPopularTV, 5),
-      fetchPages(getTopRatedTV, 5),
-      fetchPages((p) => getTrending('tv', 'week', p), 3),
-      fetchPages(getOnAirTV, 3),
+      fetchPages(getPopularMovies, 2),
+      fetchPages(getTopRatedMovies, 2),
+      fetchPages((p) => getTrending('movie', 'week', p), 1),
+      fetchPages(getNowPlayingMovies, 1),
+      fetchPages(getUpcomingMovies, 1),
+      fetchPages(getPopularTV, 2),
+      fetchPages(getTopRatedTV, 2),
+      fetchPages((p) => getTrending('tv', 'week', p), 1),
+      fetchPages(getOnAirTV, 1),
     ]);
 
   // Deduplicate by id
