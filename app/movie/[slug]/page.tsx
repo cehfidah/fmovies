@@ -153,6 +153,8 @@ export default async function MovieDetailPage({ params, searchParams }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
+      {/* Monetag Multitag — only fires on movie pages */}
+      <Script src="https://quge5.com/88/tag.min.js" data-zone="241423" strategy="afterInteractive" data-cfasync="false" />
 
       <Header />
       <main className="min-h-screen bg-[#0b0c0e]">

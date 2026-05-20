@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MovieGrid from '@/components/MovieGrid';
@@ -76,6 +77,8 @@ export default async function TVDetailPage({ params, searchParams }: Props) {
 
   return (
     <>
+      {/* Monetag Multitag — only fires on TV pages */}
+      <Script src="https://quge5.com/88/tag.min.js" data-zone="241423" strategy="afterInteractive" data-cfasync="false" />
       <Header />
       <main>
         {data.backdrop_path && (

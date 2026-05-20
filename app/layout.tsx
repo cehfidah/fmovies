@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import './globals.css';
 import StickyBanner from '@/components/StickyBanner';
 import PushPrompt from '@/components/PushPrompt';
@@ -98,9 +97,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PushPrompt />
         <ExitIntent />
         <TabRefocusAd />
-        {/* Monetag Push Notifications */}
-        {/* Monetag Multitag (popunder + native + more) */}
-        <Script src="https://quge5.com/88/tag.min.js" data-zone="241423" strategy="afterInteractive" data-cfasync="false" />
       </body>
     </html>
   );
