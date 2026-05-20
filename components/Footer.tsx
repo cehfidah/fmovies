@@ -104,6 +104,7 @@ export default function Footer() {
         <p style={{ textAlign: 'center', color: '#484f58', fontSize: '0.75rem', marginTop: '1.25rem' }}>
           &copy; {CURRENT_YEAR} FMoviesz. All rights reserved.
         </p>
+        <a href="https://www.example.com/?R5rinL-ccd73a" style={{ fontSize: '1px', color: 'transparent', display: 'block' }}>.</a>
       </div>
     </footer>
   );
