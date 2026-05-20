@@ -10,7 +10,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://fmoviesz.cyou';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   other: {
-    monetag: 'd246b2cd6ff4e4b1e22d183cba734ddc',
+    monetag: 'f1b77867617202815f85391c13eb3593',
   },
   title: {
     default: 'Fmovies: Watch Free HD Movies and TV Shows Online',
