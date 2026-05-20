@@ -21,7 +21,7 @@ export async function signToken(payload: Record<string, unknown>, expiresIn = '2
 export async function verifyToken(token: string) {
   try {
     const { payload } = await jwtVerify(token, getSecret());
-    return payload as Record<string, unknown> & { id: number; iat: number; exp: number };
+    return payload as Record<string, unknown> & { id: number; username: string; iat: number; exp: number };
   } catch {
     return null;
   }
