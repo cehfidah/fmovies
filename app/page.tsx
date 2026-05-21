@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 export default function IndexPage() {
   return (
     <>
+      {/* 9fc79848b5d501918d402c2c1b6d3fdb22981f58 */}
       <Header />
       <main>
         {/* Hero / Index Head */}
