@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { title, slug, content, meta_description, meta_keywords, featured_image, published } = body;
+    const { title, slug, content, meta_description, meta_keywords, featured_image, published, category, tags, author } = body;
 
     if (!title || typeof title !== 'string' || !slug || typeof slug !== 'string') {
       return NextResponse.json({ error: 'title and slug are required' }, { status: 400 });
@@ -33,6 +33,9 @@ export async function POST(req: NextRequest) {
       meta_keywords: typeof meta_keywords === 'string' ? meta_keywords.slice(0, 1000) : undefined,
       featured_image: typeof featured_image === 'string' ? featured_image.slice(0, 1000) : undefined,
       published: !!published,
+      category: typeof category === 'string' ? category.slice(0, 100) : undefined,
+      tags: typeof tags === 'string' ? tags.slice(0, 500) : undefined,
+      author: typeof author === 'string' ? author.slice(0, 200) : undefined,
     });
 
     return NextResponse.json(post, { status: 201 });

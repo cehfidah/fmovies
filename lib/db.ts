@@ -31,6 +31,14 @@ export async function initDB() {
     )
   `;
 
+  // Migrate: add new columns if they don't exist yet
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS category VARCHAR(100)`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS tags TEXT`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS author VARCHAR(200)`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS ai_generated BOOLEAN DEFAULT false`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_posts_published ON posts(published, created_at DESC)`;
+
   await sql`
     CREATE TABLE IF NOT EXISTS admin_users (
       id SERIAL PRIMARY KEY,
@@ -103,6 +111,10 @@ export async function getPosts(publishedOnly = true): Promise<any[]> {
   return sql`SELECT * FROM posts ORDER BY created_at DESC` as Promise<any[]>;
 }
 
+export async function getPostsByCategory(category: string): Promise<any[]> {
+  return sql`SELECT * FROM posts WHERE published = true AND category = ${category} ORDER BY created_at DESC` as Promise<any[]>;
+}
+
 export async function getPostBySlug(slug: string) {
   const rows = await sql`SELECT * FROM posts WHERE slug = ${slug} LIMIT 1` as any[];
   return rows[0] || null;
@@ -121,11 +133,18 @@ export async function createPost(data: {
   meta_keywords?: string;
   featured_image?: string;
   published?: boolean;
+  category?: string;
+  tags?: string;
+  author?: string;
+  ai_generated?: boolean;
 }) {
   const rows = await sql`
-    INSERT INTO posts (title, slug, content, meta_description, meta_keywords, featured_image, published)
-    VALUES (${data.title}, ${data.slug}, ${data.content ?? null}, ${data.meta_description ?? null},
-            ${data.meta_keywords ?? null}, ${data.featured_image ?? null}, ${data.published ?? false})
+    INSERT INTO posts (title, slug, content, meta_description, meta_keywords, featured_image, published, category, tags, author, ai_generated)
+    VALUES (
+      ${data.title}, ${data.slug}, ${data.content ?? null}, ${data.meta_description ?? null},
+      ${data.meta_keywords ?? null}, ${data.featured_image ?? null}, ${data.published ?? false},
+      ${data.category ?? null}, ${data.tags ?? null}, ${data.author ?? null}, ${data.ai_generated ?? false}
+    )
     RETURNING *
   ` as any[];
   return rows[0];
@@ -141,18 +160,24 @@ export async function updatePost(
     meta_keywords?: string;
     featured_image?: string;
     published?: boolean;
+    category?: string;
+    tags?: string;
+    author?: string;
   }
 ) {
   const rows = await sql`
     UPDATE posts SET
-      title = COALESCE(${data.title ?? null}, title),
-      slug = COALESCE(${data.slug ?? null}, slug),
-      content = COALESCE(${data.content ?? null}, content),
+      title            = COALESCE(${data.title ?? null}, title),
+      slug             = COALESCE(${data.slug ?? null}, slug),
+      content          = COALESCE(${data.content ?? null}, content),
       meta_description = COALESCE(${data.meta_description ?? null}, meta_description),
-      meta_keywords = COALESCE(${data.meta_keywords ?? null}, meta_keywords),
-      featured_image = COALESCE(${data.featured_image ?? null}, featured_image),
-      published = COALESCE(${data.published ?? null}, published),
-      updated_at = NOW()
+      meta_keywords    = COALESCE(${data.meta_keywords ?? null}, meta_keywords),
+      featured_image   = COALESCE(${data.featured_image ?? null}, featured_image),
+      published        = COALESCE(${data.published ?? null}, published),
+      category         = COALESCE(${data.category ?? null}, category),
+      tags             = COALESCE(${data.tags ?? null}, tags),
+      author           = COALESCE(${data.author ?? null}, author),
+      updated_at       = NOW()
     WHERE id = ${id}
     RETURNING *
   ` as any[];

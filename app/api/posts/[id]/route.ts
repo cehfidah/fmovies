@@ -25,7 +25,7 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
 
   try {
     const body = await req.json();
-    const { title, slug, content, meta_description, meta_keywords, featured_image, published } = body;
+    const { title, slug, content, meta_description, meta_keywords, featured_image, published, category, tags, author } = body;
 
     if (slug && !/^[a-z0-9-]+$/.test(slug)) {
       return NextResponse.json({ error: 'Slug must contain only lowercase letters, numbers, and hyphens' }, { status: 400 });
@@ -39,6 +39,9 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
       meta_keywords: typeof meta_keywords === 'string' ? meta_keywords.slice(0, 1000) : undefined,
       featured_image: typeof featured_image === 'string' ? featured_image.slice(0, 1000) : undefined,
       published: typeof published === 'boolean' ? published : undefined,
+      category: typeof category === 'string' ? category.slice(0, 100) : undefined,
+      tags: typeof tags === 'string' ? tags.slice(0, 500) : undefined,
+      author: typeof author === 'string' ? author.slice(0, 200) : undefined,
     });
 
     if (!post) return NextResponse.json({ error: 'Not found' }, { status: 404 });

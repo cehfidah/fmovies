@@ -34,6 +34,10 @@ export interface Post {
   meta_keywords: string | null;
   featured_image: string | null;
   published: boolean;
+  category: string | null;
+  tags: string | null;
+  author: string | null;
+  ai_generated: boolean;
   created_at: string;
   updated_at: string;
 }
