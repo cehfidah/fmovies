@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getAuthUser } from '@/lib/auth';
 import { getPosts } from '@/lib/db';
 import AdminShell from '@/components/admin/AdminShell';
+import DeleteButton from './DeleteButton';
 
 export default async function AdminPostsPage() {
   const user = await getAuthUser();
@@ -67,23 +68,5 @@ export default async function AdminPostsPage() {
         )}
       </div>
     </AdminShell>
-  );
-}
-
-// Delete button (client component inline)
-function DeleteButton({ id }: { id: number }) {
-  return (
-    <form action={`/api/posts/${id}`} method="DELETE"
-      onSubmit={async (e) => {
-        e.preventDefault();
-        if (!confirm('Delete this post?')) return;
-        const r = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
-        if (r.ok) location.reload();
-      }}
-    >
-      <button type="submit" style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '1rem', padding: 0 }} title="Delete">
-        <i className="uil uil-trash-alt" />
-      </button>
-    </form>
   );
 }
