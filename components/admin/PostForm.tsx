@@ -357,7 +357,7 @@ export default function PostForm({ mode, post }: Props) {
               { label: 'Title 50-60 chars', ok: title.length >= 50 && title.length <= 65 },
               { label: 'Meta desc 140-160 chars', ok: metaDesc.length >= 140 && metaDesc.length <= 165 },
               { label: 'Has category', ok: !!category },
-              { label: 'Has 5+ tags', ok: tags.split(',').filter(t => t.trim()).length >= 5 },
+              { label: 'Has 5+ tags', ok: tags.split(',').filter((t: string) => t.trim()).length >= 5 },
               { label: 'Has featured image', ok: !!featImg },
               { label: 'Content >1000 words', ok: content.replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length >= 1000 },
             ].map(item => (
