@@ -309,7 +309,7 @@ export default function PostForm({ mode, post }: Props) {
               <input type="text" value={tags} onChange={e => setTags(e.target.value)} placeholder="watch free movies, stream hd, fmovies" style={inputStyle} />
               {tags && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
-                  {tags.split(',').map(t => t.trim()).filter(Boolean).map((t, i) => (
+                  {tags.split(',').map((t: string) => t.trim()).filter(Boolean).map((t: string, i: number) => (
                     <span key={i} style={{ background: 'rgba(0,172,193,0.1)', border: '1px solid rgba(0,172,193,0.25)', color: '#00cee7', borderRadius: '20px', fontSize: '0.7rem', padding: '2px 8px' }}>{t}</span>
                   ))}
                 </div>
