@@ -150,7 +150,7 @@ export async function GET(req: NextRequest) {
       content: generated.content || '',
       meta_description: (generated.meta_description || '').slice(0, 300),
       meta_keywords: (generated.tags || '').slice(0, 500),
-      featured_image: chosenMovie.poster ? `https://image.tmdb.org/t/p/w780${chosenMovie.poster}` : null,
+      featured_image: chosenMovie.poster ? `https://image.tmdb.org/t/p/w780${chosenMovie.poster}` : undefined,
       published: true,
       category: chosenMovie.isTV ? 'TV Series Review' : 'Movie Review',
       tags: (generated.tags || '').slice(0, 500),
