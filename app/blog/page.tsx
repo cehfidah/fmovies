@@ -34,9 +34,7 @@ export default async function BlogPage() {
               <Link
                 key={post.id}
                 href={`/${post.slug}`}
-                style={{ textDecoration: 'none', display: 'block', background: '#161b22', border: '1px solid #30363d', borderRadius: '12px', overflow: 'hidden', transition: 'border-color 0.2s, transform 0.2s' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#00acc1'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#30363d'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                className="blog-card"
               >
                 {/* Thumbnail */}
                 {post.featured_image ? (

@@ -288,6 +288,21 @@ a:hover { color: var(--primary); }
 }
 .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+/* ── Blog card ── */
+.blog-card {
+  text-decoration: none;
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.blog-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
 /* ── Admin ── */
 .admin-sidebar {
   width: 240px;
