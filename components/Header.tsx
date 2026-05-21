@@ -98,6 +98,7 @@ export default function Header() {
     { href: '/fmovies-series', label: 'TV Series' },
     { href: '/top-imdb', label: 'Top IMDb' },
     { href: '/trending', label: 'Trending' },
+    { href: '/blog', label: 'Blog' },
   ];
 
   return (
