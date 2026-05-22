@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthUserFromRequest } from '@/lib/auth';
 import { getPostById, updatePost, deletePost } from '@/lib/db';
+import { submitToIndexNow } from '@/lib/indexnow';
+
+const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://www.fmoviesz.cyou';
 
 interface Ctx {
   params: Promise<{ id: string }>;
@@ -45,6 +48,12 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
     });
 
     if (!post) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+    // Ping IndexNow when post is published (fire-and-forget)
+    if (post.published) {
+      submitToIndexNow([`${SITE}/${post.slug}`]).catch(() => {});
+    }
+
     return NextResponse.json(post);
   } catch (err: any) {
     if (err?.message?.includes('unique')) {

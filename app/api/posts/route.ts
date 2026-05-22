@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthUserFromRequest } from '@/lib/auth';
 import { getPosts, createPost } from '@/lib/db';
+import { submitToIndexNow } from '@/lib/indexnow';
+
+const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://www.fmoviesz.cyou';
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUserFromRequest(req);
@@ -37,6 +40,11 @@ export async function POST(req: NextRequest) {
       tags: typeof tags === 'string' ? tags.slice(0, 500) : undefined,
       author: typeof author === 'string' ? author.slice(0, 200) : undefined,
     });
+
+    // Ping IndexNow for published posts (fire-and-forget)
+    if (post.published) {
+      submitToIndexNow([`${SITE}/${post.slug}`]).catch(() => {});
+    }
 
     return NextResponse.json(post, { status: 201 });
   } catch (err: any) {
