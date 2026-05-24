@@ -6,6 +6,8 @@
 # Next.js
 /.next/
 /out/
+/.open-next/
+/.wrangler/
 
 # Production
 /build
@@ -22,10 +24,13 @@ yarn-error.log*
 # Local env files
 .env
 .env*.local
+.dev.vars
+.dev.vars.*
 
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+cloudflare-env.d.ts
 
 # Wayback archive (static HTML dump — not needed in repo)
 wayback_archive/
