@@ -106,13 +106,16 @@ export async function upsertSlugMapping(
 
 export async function getPosts(publishedOnly = true): Promise<any[]> {
   if (publishedOnly) {
-    return sql`SELECT * FROM posts WHERE published = true ORDER BY created_at DESC` as Promise<any[]>;
+    const rows = await sql`SELECT * FROM posts WHERE published = true ORDER BY created_at DESC` as any[];
+    return Array.isArray(rows) ? rows : [];
   }
-  return sql`SELECT * FROM posts ORDER BY created_at DESC` as Promise<any[]>;
+  const rows = await sql`SELECT * FROM posts ORDER BY created_at DESC` as any[];
+  return Array.isArray(rows) ? rows : [];
 }
 
 export async function getPostsByCategory(category: string): Promise<any[]> {
-  return sql`SELECT * FROM posts WHERE published = true AND category = ${category} ORDER BY created_at DESC` as Promise<any[]>;
+  const rows = await sql`SELECT * FROM posts WHERE published = true AND category = ${category} ORDER BY created_at DESC` as any[];
+  return Array.isArray(rows) ? rows : [];
 }
 
 export async function getPostBySlug(slug: string) {
